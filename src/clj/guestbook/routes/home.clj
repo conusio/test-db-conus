@@ -4,21 +4,24 @@
             [ring.util.http-response :as response]
             [clojure.java.io :as io]
             [guestbook.db.core :as db]
-            [struct.core :as st]))
+            [struct.core :as st]
+            [clojure.tools.logging :as log]))
 
 
 (defn home-page [{:keys [flash]}]
-  (layout/render
-    "home.html"
-    (merge {:messages (db/get-messages)}
-           (select-keys flash [:name :message :errors]))))
+  (let [_ (log/info "flash is" flash)
+        _ (log/info "db/get-messages is " (db/get-messages))]
+    (layout/render
+     "home.html"
+     (merge {:messages (db/get-messages)}
+            (select-keys flash [:name :description :askingprice :producturl :image :errors])))))
 
 (def message-schema
   [[:name st/required st/string]
-   [:message
+   [:description
     st/required
     st/string
-    {:message "message must contain at least 10 characters"
+    {:message "description must contain at least 10 characters"
      :validate #(> (count %) 9)}]])
 
 (defn validate-message [params]

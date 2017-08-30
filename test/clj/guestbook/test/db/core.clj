@@ -18,8 +18,11 @@
 (deftest test-message
   (jdbc/with-db-transaction [t-conn *db*]
     (jdbc/db-set-rollback-only! t-conn)
-    (let [message {:name "test"
-                   :message "test"
+    (let [message {:name "off brand monitor"
+                   :description "Natively, it is dual-link DVI only. (The display is too high resolution for ordinary DVI.) I have an Apple (that is: expensive) adaptor from mini-displayport to dual-link DVI"
+                   :askingprice "75"
+                   :producturl "none"
+                   :image "none"
                    :timestamp (java.util.Date.)}]
       (is (= 1 (db/save-message! t-conn message)))
       (let [result (db/get-messages t-conn {})]
